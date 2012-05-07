@@ -7,19 +7,40 @@
 \setcounter{pytexcount}{0}
 
 \newwrite\PYTEX@sf
+\newtoks\PYTEX@acc
 
-\newcommand{\pytexStart}{
-  \addtocounter{pytexcount}{1}%
-  \setcounter{pytexsubcount}{0}%
-  \immediate\openout\PYTEX@sf=snippet_\alph{pytexcount}.py\relax%
-  \immediate\write\PYTEX@sf{##=== pytex::\alph{pytexcount} ====}%
+
+\def\@enamedef#1{\expandafter\def\csname #1\expandafter\endcsname\expandafter}
+
+\@namedef{pytex-empty}{}
+% Assign a new header
+\newenvironment{pytexTemplate}[1]
+{%
+  \global\PYTEX@acc={}%   clear accumulator
+  \def\verbatim@processline{\global\PYTEX@acc=\expandafter{\the\expandafter\PYTEX@acc\the\verbatim@line^^J}}%   each line is added to accumulator
+  \def\verbatim@finish{\global\@enamedef{pytex-#1}{\the\PYTEX@acc}}% Store accumulator content to pytex-#1
+  \verbatim%
+}
+{
+\endverbatim%
+}
+
+% The default header is empty
+\@namedef{pytex-empty}{}
+
+\newcommand{\pytexStart}[1]{
+  \addtocounter{pytexcount}{1}%   pytexcoun++
+  \setcounter{pytexsubcount}{0}%  reset pytexsubcount
+  \immediate\openout\PYTEX@sf=pytex_\alph{pytexcount}.py\relax%  open file for writing
+  \immediate\write\PYTEX@sf{##=== pytex::#1 ====}%  write information to file
+  \immediate\write\PYTEX@sf{\@nameuse{pytex-#1}}%   write header to file
 }
 
 \newenvironment{pytex}
 {%
-  \addtocounter{pytexsubcount}{1} % pytexsubcount++
-  \immediate\write\PYTEX@sf{##=== pytex snippet::\arabic{pytexsubcount} ===}%
-  \def\verbatim@processline{\immediate\write\PYTEX@sf{\the\verbatim@line}\the\verbatim@line\par}%
+  \addtocounter{pytexsubcount}{1}%                                             pytexsubcount++
+  \immediate\write\PYTEX@sf{print "pytex snippet::\arabic{pytexsubcount}"}%    print separator to stdout
+  \def\verbatim@processline{\immediate\write\PYTEX@sf{\the\verbatim@line}\the\verbatim@line\par}% write each verbatim line to file
   \verbatim%
 }
 {\endverbatim%

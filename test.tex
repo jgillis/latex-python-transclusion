@@ -4,24 +4,59 @@
 \begin{document}
 
 
-%\begin{pytexTemplate}{main}
-%  import copy
-%\end{pytexTemplate}
+\begin{pytexTemplate}{main}
+import copy
+import numpy
+\end{pytexTemplate}
 
-\pytexStart[main]
+
+\begin{pytexTemplate}{gain}
+import scipy
+\end{pytexTemplate}
+
+
+\pytexStart{main}
 
 \begin{pytex}
-  a = 5
-  print a
+a = 5
+print a
 \end{pytex}
 
 \begin{pytex}
-  b = 6
-  print b
+b = 6
+print b
 \end{pytex}
 
 \begin{pytex}
-  print a + b
+print a + b
+\end{pytex}
+
+\pytexStart{empty}
+
+\begin{pytex}
+a = 5
+\end{pytex}
+
+\begin{pytex}
+b = 6
+\end{pytex}
+
+\begin{pytex}
+print a + b
+\end{pytex}
+
+\pytexStart{gain}
+
+\begin{pytex}
+a = 5
+\end{pytex}
+
+\begin{pytex}
+b = 6
+\end{pytex}
+
+\begin{pytex}
+print a + b
 \end{pytex}
 
 \end{document}
