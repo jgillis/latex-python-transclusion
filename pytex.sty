@@ -1,0 +1,26 @@
+\ProvidesPackage{pytex}
+\RequirePackage{verbatim}
+
+\newcounter{pytexcount}
+\newcounter{pytexsubcount}
+
+\setcounter{pytexcount}{0}
+
+\newwrite\PYTEX@sf
+
+\newcommand{\pytexStart}{
+  \addtocounter{pytexcount}{1}%
+  \setcounter{pytexsubcount}{0}%
+  \immediate\openout\PYTEX@sf=snippet_\alph{pytexcount}.py\relax%
+  \immediate\write\PYTEX@sf{##=== pytex::\alph{pytexcount} ====}%
+}
+
+\newenvironment{pytex}
+{%
+  \addtocounter{pytexsubcount}{1} % pytexsubcount++
+  \immediate\write\PYTEX@sf{##=== pytex snippet::\arabic{pytexsubcount} ===}%
+  \def\verbatim@processline{\immediate\write\PYTEX@sf{\the\verbatim@line}\the\verbatim@line\par}%
+  \verbatim%
+}
+{\endverbatim%
+}
